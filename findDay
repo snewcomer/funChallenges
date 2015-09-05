@@ -1,0 +1,61 @@
+function getGoodOldDay(input){
+  var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  var dateInput = input.split('-').map(function(e){return +e;});
+  var date = new Date();
+  date.setFullYear(dateInput[2], dateInput[1]-1, dateInput[0]);
+  return days[date.getDay()];
+};
+
+
+function getGoodOldDay(input){
+  let pad = (str, max=4) => {
+  	let x = str.length < max ? pad("0" + str, max) : str;
+    return x;
+  }
+  let returnSubstring = (indx, input) => {
+    return input.substring(0, input.indexOf('-'));
+  }
+	let day = returnSubstring(0, input)
+  input = input.replace(day + '-', '');
+	let month = returnSubstring(0, input)
+  input = input.replace(month + '-', '');
+  let year = input.toString();
+  if (year.length < 4) {
+  	year = pad(year);
+  }
+  if (month.length < 2) {
+  	month = pad(month, 2);
+  }
+  if (day.length < 2) {
+  	day = pad(day, 2);
+  }
+  let date = new Date(`${year}-${month}-${day}`);
+  date.setDate(date.getDate() + 1);
+  let nameDay = date.getDay().toString();
+  switch (nameDay) {
+    case "0": 
+      return "Sunday";
+      break;
+    case "1": 
+      return "Monday";
+      break;
+    case "2": 
+      return "Tuesday";
+      break;
+    case "3": 
+      return "Wednesday";
+      break;
+    case "4": 
+      return "Thursday";
+      break;
+    case "5": 
+      return "Friday";
+      break;
+    case "6": 
+      return "Saturday";
+      break;
+  }
+
+};
+
+getGoodOldDay('5-7-53')
