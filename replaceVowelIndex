@@ -1,0 +1,21 @@
+function vowel2index(str) {
+   return str.replace(/[aeiou]/ig, (m, i) => i + 1);
+}
+
+
+function vowel2index(str) {
+	let regex = /[aeiou]/i;
+  var myArray;
+  let arr = [];
+  while ((myArray = regex.exec(str)) !== null) {
+    let match = regex.exec(str);
+    arr.push(match.index + 1);
+    str = str.replace(regex, '$');
+  }
+  for (let x of str) {
+    if (x === '$') {
+      str = str.replace(/\$/, arr.shift());
+    }
+  }
+  return str;
+}
