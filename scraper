@@ -1,0 +1,60 @@
+'''
+Silver Sevens Casino scraper
+
+lxml docs:
+
+    http://lxml.de/api/lxml.etree._Element-class.html
+
+'''
+import re
+import requests
+from lxml import html
+
+
+class nFile(file):
+    "Adds newline onto the end of all writes."
+
+    def __init__(self, name, mode = 'r'):
+        self = file.__init__(self, name, mode)
+        
+    def write(self, string):
+        self.writelines(string + '\n')
+
+
+def re_write(s):
+    "Abstract Regex find logic used b/4 writing to the file"
+    try:
+        return ' '.join(re.findall(pattern, ''.join(s).encode('utf-8')))
+    except AttributeError:
+        return ''
+
+
+page = requests.get('http://www.silversevenscasino.com/promotions-special-offers')
+tree = html.fromstring(page.text)
+# list of divs containing promos
+divs = tree.xpath('//div[contains(@class, "views-row views-row-")]') 
+
+pattern = r'[\w\d\.\:\,\-\_\'\"\!]+'
+
+
+def main():
+    f = nFile('outfile.txt', 'w')
+    for div in divs:
+        # loop through all contents in a single div and write the info wanted
+
+        for node in div.iter('*'):
+            if node.tag == 'h4':
+                f.write(re_write(node.text))
+            if node.tag == 'li':
+                try:
+                    f.write(re_write(node.text))
+                except AttributeError:
+                    pass
+        # line separator in between promos 
+        f.write('')
+    # close file when finished scraping
+    f.close()
+
+
+if __name__ == '__main__':
+    main()
