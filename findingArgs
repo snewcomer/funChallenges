@@ -1,0 +1,6 @@
+let funcer = func;
+  let args;
+  func = function() {
+    args = arguments;
+    funcer.apply(this, arguments);
+  }
