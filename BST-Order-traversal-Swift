@@ -1,0 +1,14 @@
+func levelOrder(root: Node?) {
+  var queue = [root!]
+  while queue.count > 0 {
+      let node = queue.removeAtIndex(0)
+      print(node.data, terminator: " ")
+      if let leftyNode = node.left {
+          queue.append(leftyNode)
+      }
+      if let rightyNode = node.right {
+          queue.append(rightyNode)
+      }
+      
+  }
+}
