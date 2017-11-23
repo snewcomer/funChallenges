@@ -1,0 +1,64 @@
+import re
+import string
+
+# def encode(plain_text):
+#     clean = re.sub(r'\W+', "", plain_text).lower()
+#     joined_word = "".join([shift_by_25(x) for x in clean])
+
+#     split_string = lambda x, n: [x[i:i+n] for i in range(0, len(x), n)]
+#     joined_word = split_string(joined_word, 5)
+
+#     return " ".join(joined_word)
+
+# def decode(ciphered_text):
+#     clean = re.sub(r'\W+', "", ciphered_text).lower()
+#     return "".join([shift_by_25(x) for x in clean])
+
+
+# def shift_by_25(letter):
+#     """
+#     n is in the middle == 97 + 13
+
+#     # a 97 => z 122  => (110 - 97) * 2 - 1 === 25
+#     # b 98 => y 121  => (110 - 98) * 2 - 1 === 23
+
+#     # n 110 => m 109  => (110 - 110) * 2 - 1 === -1
+#     # o 111 => l 108  => (110 - 111) * 2 -1 === -3
+#     # 
+#     """
+#     if letter.isdigit():
+#         return letter
+
+#     ordinal = ord(letter)
+#     num = (110 - ordinal) * 2 - 1
+
+#     if num < 0:
+#         num =  ordinal - abs(num)
+#     else:
+#         num =  ordinal + abs(num)
+
+#     return chr(num)
+
+
+## ANOTHER SOLUTION w/ maketrans translation map
+
+alphabet = string.ascii_lowercase
+rev_alphabet = string.ascii_lowercase[::-1]
+
+ENCODED_MAP = str.maketrans(alphabet, rev_alphabet)
+DECODED_MAP = str.maketrans(rev_alphabet, alphabet)
+
+def group_by_5(text):
+    for indx, letter in enumerate(text):
+        if indx and indx % 5 == 0:
+            yield ' '
+        
+        yield letter
+
+def encode(plain_text):
+    clean = re.sub(r'\W+', "", plain_text).lower()
+    return "".join(group_by_5(clean)).translate(ENCODED_MAP)
+
+def decode(ciphered_text):
+    clean = re.sub(r'\W+', "", ciphered_text).lower()
+    return clean.translate(DECODED_MAP)
